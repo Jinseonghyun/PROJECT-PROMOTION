@@ -8,14 +8,7 @@
           <set>
             <option value="$PROJECT_DIR$/promotion" />
             <option value="$PROJECT_DIR$/promotion/discovery-service" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/promotion/discovery-service" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/promotion/discovery-service" />
+            <option value="$PROJECT_DIR$/promotion/user-service" />
           </set>
         </option>
       </GradleProjectSettings>
