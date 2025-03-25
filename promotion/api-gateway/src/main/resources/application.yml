@@ -22,9 +22,35 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/api/v1/users/signup, /api/v1/users/login, /api/v1/users/validate-token, /api/v1/users/refresh-token
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: userServiceBreaker
+                fallbackUri: forward:/fallback/users
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/api/v1/users/**
           filters:
+            - name: CircuitBreaker
+              args:
+                name: userServiceBreaker
+                fallbackUri: forward:/fallback/users
             - name: JwtAuthenticationFilter
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      userServiceBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 5 # ?? ????? ??? ?? ?? ?
+        minimumNumberOfCalls: 10 # ?? ?? ??, ? ?? ??? ?? ????? ??? ???
+        permittedNumberOfCallsInHalfOpenState: 10 # ?-?? ???? ???? ?? ?
+        automaticTransitionFromOpenToHalfOpenEnabled: true # ?? ????? ???? ?-?? ??? ????? ??
+        waitDurationInOpenState: 5000 # ?? ????? ?? ??? ???? ??
+        failureRateThreshold: 50 # ??? ??, ? ??? ???? ??? ???? ?? ????? ????
+        eventConsumerBufferSize: 10
+        record-exceptions:
+          - java.util.concurrent.TimeoutException
+          - org.springframework.cloud.gateway.support.NotFoundException
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
