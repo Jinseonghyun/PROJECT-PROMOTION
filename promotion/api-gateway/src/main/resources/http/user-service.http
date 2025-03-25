@@ -1,0 +1,30 @@
+### User Signup
+POST http://localhost:8000/api/v1/users/signup
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123",
+  "name": "Test User"
+}
+
+### User Login (로그인 하면 생기는 token 테스트 위해 임시 저장)
+POST http://localhost:8000/api/v1/users/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+> {%
+client.global.set("auth_token", response.body.token);
+%}
+
+### Validate Token
+POST http://localhost:8000/api/v1/users/validate-token
+Content-Type: application/json
+
+{
+  "token": "{{auth_token}}"
+}
