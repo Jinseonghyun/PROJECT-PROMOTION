@@ -15,18 +15,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CouponService {
     private final CouponRepository couponRepository;
-    private final CouponPolicyService couponPolicyService;
     private final CouponPolicyRepository couponPolicyRepository;
 
     @Transactional
-    public Coupon issueCoupon(CouponDto.IssueRequest request, Long userId) {
+    public Coupon issueCoupon(CouponDto.IssueRequest request) {
         CouponPolicy couponPolicy = couponPolicyRepository.findByIdWithLock(request.getCouponPolicyId())
                 .orElseThrow(() -> new CouponIssieException("쿠폰 정책을 찾을 수 없습니다."));
 
