@@ -5,12 +5,17 @@ import com.backend.couponservice.domain.Coupon;
 import com.backend.couponservice.domain.CouponPolicy;
 import com.backend.couponservice.dto.v1.CouponDto;
 import com.backend.couponservice.exception.CouponIssieException;
+import com.backend.couponservice.exception.CouponNotFoundException;
 import com.backend.couponservice.repository.CouponPolicyRepository;
 import com.backend.couponservice.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +25,7 @@ public class CouponService {
     private final CouponPolicyService couponPolicyService;
     private final CouponPolicyRepository couponPolicyRepository;
 
+    @Transactional
     public Coupon issueCoupon(CouponDto.IssueRequest request, Long userId) {
         CouponPolicy couponPolicy = couponPolicyRepository.findByIdWithLock(request.getCouponPolicyId())
                 .orElseThrow(() -> new CouponIssieException("쿠폰 정책을 찾을 수 없습니다."));
@@ -44,5 +50,40 @@ public class CouponService {
 
     private String generateCouponCode() {
         return UUID.randomUUID().toString().substring(0, 8);
+    }
+
+    @Transactional
+    public Coupon useCoupon(Long couponId, Long orderId) {
+        Long currentUserId = UserIdInterceptor.getCurrentUserId();
+
+        Coupon coupon = couponRepository.findByIdAndUserId(couponId, currentUserId)
+                .orElseThrow(() -> new CouponNotFoundException("쿠폰을 찾을 수 없거나 접근 권한이 없습니다."));
+
+        coupon.use(orderId);
+        return coupon;
+    }
+
+    @Transactional
+    public Coupon cancelCoupon(Long couponId) {
+        Long currentUserId = UserIdInterceptor.getCurrentUserId();
+
+        Coupon coupon = couponRepository.findByIdAndUserId(couponId, currentUserId)
+                .orElseThrow(() -> new CouponNotFoundException("쿠폰을 찾을 수 없거나 접근 권한이 없습니다."));
+
+        coupon.cancel();
+        return coupon;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Coupon> getCoupons(CouponDto.ListRequest request) {
+        Long currentUserId = UserIdInterceptor.getCurrentUserId();
+        return couponRepository.findByUserIdAndStatusOrderByCreatedAtDesc(
+                currentUserId,
+                request.getStatus(),
+                PageRequest.of(
+                        request.getPage() != null ? request.getPage() : 0,
+                        request.getSize() != null ? request.getSize() : 10
+                )
+        );
     }
 }
