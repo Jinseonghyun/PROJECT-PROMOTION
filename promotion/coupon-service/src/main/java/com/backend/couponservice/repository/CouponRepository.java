@@ -1,7 +1,6 @@
 package com.backend.couponservice.repository;
 
 import com.backend.couponservice.domain.Coupon;
-import com.backend.couponservice.domain.CouponPolicy;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
