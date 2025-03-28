@@ -1,4 +1,4 @@
-package com.backend.controller.v1;
+package com.backend.couponservice.controller.v1;
 
 import com.backend.couponservice.dto.v1.CouponPolicyDto;
 import com.backend.couponservice.service.v1.CouponPolicyService;
