@@ -1,7 +1,6 @@
 package com.backend.couponservice.repository;
 
 import com.backend.couponservice.domain.Coupon;
-import com.backend.couponservice.domain.CouponPolicy;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,5 +21,5 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT c FROM Coupon c WHERE c.id = :id")
-    Optional<CouponPolicy> findByIdWithLock(Long id);
+    Optional<Coupon> findByIdWithLock(Long id);
 }
