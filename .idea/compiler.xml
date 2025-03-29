@@ -25,6 +25,9 @@
       <module name="discovery-service.main" target="17" />
       <module name="discovery-service.test" target="17" />
       <module name="point-service" target="17" />
+      <module name="point-service-batch" target="17" />
+      <module name="point-service-batch.main" target="17" />
+      <module name="point-service-batch.test" target="17" />
       <module name="point-service.main" target="17" />
       <module name="point-service.test" target="17" />
       <module name="user-service" target="17" />
