@@ -119,14 +119,18 @@ public class CouponService {
     }
 
     @Transactional
-    public com.backend.couponservice.dto.v1.CouponDto.Response cancelCoupon(Long couponId) {
-        Coupon coupon = couponRepository.findByIdWithLock(couponId)
-                .orElseThrow(() -> new CouponNotFoundException("쿠폰을 찾을 수 없습니다."));
+    public Coupon cancelCoupon(Long couponId) {
+        Coupon coupon = couponRepository.findByIdAndUserId(couponId, UserIdInterceptor.getCurrentUserId())
+                .orElseThrow(() -> new IllegalArgumentException("쿠폰을 찾을 수 없습니다."));
+
+        if (!coupon.isUsed()) {
+            throw new IllegalStateException("사용되지 않은 쿠폰은 취소할 수 없습니다.");
+        }
 
         coupon.cancel();
         couponStateService.updateCouponState(coupon);
 
-        return com.backend.couponservice.dto.v1.CouponDto.Response.from(coupon);
+        return coupon;
     }
 
     private String generateCouponCode() {
