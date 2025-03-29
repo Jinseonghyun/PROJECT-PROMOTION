@@ -75,4 +75,8 @@ public class Coupon {
         LocalDateTime now = LocalDateTime.now();
         return now.isBefore(couponPolicy.getStartTime()) || now.isAfter(couponPolicy.getEndTime());
     }
+
+    public boolean isUsed() {
+        return status == Status.USED;
+    }
 }
