@@ -10,6 +10,14 @@ public class CouponDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class IssueRequest {
+        private Long couponPolicyId;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class IssueMessage {
         private Long policyId;
         private Long userId;
