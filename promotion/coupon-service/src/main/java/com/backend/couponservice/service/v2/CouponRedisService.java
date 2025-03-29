@@ -1,5 +1,6 @@
 package com.backend.couponservice.service.v2;
 
+import com.backend.couponservice.aop.CouponMetered;
 import com.backend.couponservice.config.UserIdInterceptor;
 import com.backend.couponservice.domain.Coupon;
 import com.backend.couponservice.domain.CouponPolicy;
@@ -32,6 +33,7 @@ public class CouponRedisService {
     private static final long LOCK_LEASE_TIME = 5;
 
     @Transactional
+    @CouponMetered(version = "v2")
     public Coupon issueCoupon(CouponDto.IssueRequest request) {
         String quantityKey = COUPON_QUANTITY_KEY + request.getCouponPolicyId();
         String lockKey = COUPON_LOCK_KEY + request.getCouponPolicyId();

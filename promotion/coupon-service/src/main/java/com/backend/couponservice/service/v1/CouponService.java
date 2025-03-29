@@ -1,5 +1,6 @@
 package com.backend.couponservice.service.v1;
 
+import com.backend.couponservice.aop.CouponMetered;
 import com.backend.couponservice.config.UserIdInterceptor;
 import com.backend.couponservice.domain.Coupon;
 import com.backend.couponservice.domain.CouponPolicy;
@@ -24,6 +25,7 @@ public class CouponService {
     private final CouponPolicyRepository couponPolicyRepository;
 
     @Transactional
+    @CouponMetered(version = "v1")
     public Coupon issueCoupon(CouponDto.IssueRequest request) {
         CouponPolicy couponPolicy = couponPolicyRepository.findByIdWithLock(request.getCouponPolicyId())
                 .orElseThrow(() -> new CouponIssueException("쿠폰 정책을 찾을 수 없습니다."));
