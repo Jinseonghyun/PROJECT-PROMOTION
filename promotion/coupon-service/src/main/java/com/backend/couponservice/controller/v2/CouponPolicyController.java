@@ -1,6 +1,6 @@
 package com.backend.couponservice.controller.v2;
 
-import com.backend.couponservice.dto.v1.CouponPolicyDto;
+import com.backend.couponservice.dto.v2.CouponPolicyDto;
 import com.backend.couponservice.service.v2.CouponPolicyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
