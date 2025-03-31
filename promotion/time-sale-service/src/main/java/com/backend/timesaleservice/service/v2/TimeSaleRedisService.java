@@ -1,5 +1,6 @@
 package com.backend.timesaleservice.service.v2;
 
+import com.backend.timesaleservice.aop.TimeSaleMetered;
 import com.backend.timesaleservice.domain.Product;
 import com.backend.timesaleservice.domain.TimeSale;
 import com.backend.timesaleservice.domain.TimeSaleOrder;
@@ -72,6 +73,7 @@ public class TimeSaleRedisService {
     }
 
     @Transactional
+    @TimeSaleMetered(version = "v2")
     public TimeSale purchaseTimeSale(Long timeSaleId, TimeSaleDto.PurchaseRequest request) {
         RLock lock = redissonClient.getLock(TIME_SALE_LOCK + timeSaleId);
         if (lock == null) {
