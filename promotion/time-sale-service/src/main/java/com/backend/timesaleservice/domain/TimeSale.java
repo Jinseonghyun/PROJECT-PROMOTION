@@ -97,4 +97,11 @@ public class TimeSale {
             throw new IllegalStateException("Time sale is not in valid period");
         }
     }
+
+    public Product getProduct() {
+        if (this.product instanceof HibernateProxy) {
+            return (Product) ((HibernateProxy) this.product).getHibernateLazyInitializer().getImplementation();
+        }
+        return this.product;
+    }
 }
