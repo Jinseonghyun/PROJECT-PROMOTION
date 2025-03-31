@@ -112,4 +112,5 @@ public class TimeSaleDto {
         private String requestId;
         private String status;
     }
+
 }
